@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: plateconnect_db
+    restart: always
+    environment:
+      POSTGRES_USER: plate
+      POSTGRES_PASSWORD: connect
+      POSTGRES_DB: plateconnect
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  auth:
+    build: ./services/auth
+    container_name: plateconnect_auth
+    ports:
+      - "7001:7001"
+    depends_on:
+      - db # Ensure db is started before auth
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: plate
+      DB_PASSWORD: connect
+      DB_NAME: plateconnect
+
+volumes:
+  db_data: # Persistent volume for PostgreSQL data
+    
