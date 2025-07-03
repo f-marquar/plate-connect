@@ -7,8 +7,8 @@ import (
 	"net/http"
 
 	"plate-connect/services/auth/db"
-
-	"encoding/json"
+	"plate-connect/services/auth/handlers"
+	// "encoding/json"
 )
 
 func main() {
@@ -33,8 +33,7 @@ func main() {
 		fmt.Fprintln(w, "Auth service and DB are healthy (GORM)")
 	})
 
-
-	http.HandleFunc("/register", registerHandler)
+	http.HandleFunc("/register", handlers.RegisterHandler)
 
 	fmt.Println("Starting Auth service on :7001")
 	err = http.ListenAndServe(":7001", nil)
@@ -43,25 +42,25 @@ func main() {
 	}
 }
 
-func registerHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Nur POST erlaubt", http.StatusMethodNotAllowed)
-		return
-	}
+// func registerHandler(w http.ResponseWriter, r *http.Request) {
+// 	if r.Method != http.MethodPost {
+// 		http.Error(w, "Nur POST erlaubt", http.StatusMethodNotAllowed)
+// 		return
+// 	}
 
-	var user db.User
-	err := json.NewDecoder(r.Body).Decode(&user)
-	if err != nil {
-		http.Error(w, "Ungültige Eingabe", http.StatusBadRequest)
-		return
-	}
+// 	var user db.User
+// 	err := json.NewDecoder(r.Body).Decode(&user)
+// 	if err != nil {
+// 		http.Error(w, "Ungültige Eingabe", http.StatusBadRequest)
+// 		return
+// 	}
 
-	result := db.DB.Create(&user)
-	if result.Error != nil {
-		http.Error(w, "Fehler beim Speichern: "+result.Error.Error(), http.StatusInternalServerError)
-		return
-	}
+// 	result := db.DB.Create(&user)
+// 	if result.Error != nil {
+// 		http.Error(w, "Fehler beim Speichern: "+result.Error.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
 
-	w.WriteHeader(http.StatusCreated)
-	fmt.Fprintf(w, "User mit Kennzeichen %s registriert", user.Kennzeichen)
-}
+// 	w.WriteHeader(http.StatusCreated)
+// 	fmt.Fprintf(w, "User mit Kennzeichen %s registriert", user.Kennzeichen)
+// }

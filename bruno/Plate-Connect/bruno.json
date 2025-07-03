@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Plate-Connect",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
